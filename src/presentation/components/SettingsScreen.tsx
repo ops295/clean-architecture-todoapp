@@ -12,7 +12,7 @@ export const SettingsScreen: React.FC<Props> = ({ onBack, isDarkMode, toggleThem
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <button onClick={onBack} className={styles.backBtn}>
+                <button onClick={onBack} className={styles.backBtn} aria-label="Go back">
                     <ArrowLeft size={20} />
                 </button>
                 <h2>Settings</h2>
