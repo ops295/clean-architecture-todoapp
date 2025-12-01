@@ -5,25 +5,45 @@
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 50;
     backdrop-filter: blur(4px);
+    z-index: 50;
+}
+
+.modalContainer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    z-index: 51;
+    padding: 1rem;
+    pointer-events: none;
+}
+
+@media (min-width: 640px) {
+    .modalContainer {
+        align-items: center;
+        top: 0;
+    }
 }
 
 .modal {
-    width: 90%;
-    max-width: 500px;
     background: var(--bg-primary);
-    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 500px;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
     padding: 1.5rem;
-    box-shadow: var(--shadow-md);
-    z-index: 51;
+    pointer-events: auto;
+    border: 1px solid var(--border-color);
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
 }
 
 .header h2 {
@@ -34,11 +54,9 @@
 
 .closeBtn {
     color: var(--text-secondary);
-    padding: 0.25rem;
-    border-radius: 0.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.2s;
 }
 
 .closeBtn:hover {
@@ -46,44 +64,94 @@
     color: var(--text-primary);
 }
 
-.input {
-    width: 100%;
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.mainInput {
+    font-size: 1.1rem;
     padding: 0.75rem;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     background: var(--bg-secondary);
     color: var(--text-primary);
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
     outline: none;
-    transition: all 0.2s;
+    transition: border-color 0.2s;
 }
 
-.input:focus {
+.mainInput:focus {
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    background: var(--bg-primary);
+}
+
+.optionsGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 640px) {
+    .optionsGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.option {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.option label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.select,
+.subInput {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.select:focus,
+.subInput:focus {
+    border-color: var(--accent-color);
 }
 
 .footer {
     display: flex;
     justify-content: flex-end;
     gap: 0.75rem;
+    margin-top: 1rem;
 }
 
 .cancelBtn {
     padding: 0.5rem 1rem;
     color: var(--text-secondary);
     font-weight: 500;
-    border-radius: var(--radius-md);
 }
 
 .cancelBtn:hover {
-    background: var(--bg-secondary);
     color: var(--text-primary);
 }
 
 .addBtn {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.5rem;
     background: var(--accent-color);
     color: white;
     border-radius: var(--radius-md);

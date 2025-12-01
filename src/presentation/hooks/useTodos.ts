@@ -23,12 +23,15 @@ export const useTodos = () => {
         fetchTodos();
     }, [fetchTodos]);
 
-    const add = async (text: string) => {
+    const add = async (text: string, priority: 'low' | 'medium' | 'high', category?: string, dueDate?: number) => {
         const newTodo: Todo = {
             id: uuidv4(),
             text,
             completed: false,
             createdAt: Date.now(),
+            priority,
+            category,
+            dueDate,
         };
         await addTodo.execute(newTodo);
         await fetchTodos();

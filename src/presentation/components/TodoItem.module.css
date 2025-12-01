@@ -1,16 +1,32 @@
 .item {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 1rem;
     background: var(--bg-primary);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-sm);
     margin-bottom: 0.75rem;
     transition: box-shadow 0.2s;
+    overflow: hidden;
 }
 
 .item:hover {
     box-shadow: var(--shadow-md);
+}
+
+.mainContent {
+    display: flex;
+    align-items: flex-start;
+    flex: 1;
+    min-width: 0;
+}
+
+.contentWrapper {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .checkbox {
@@ -24,6 +40,7 @@
     margin-right: 1rem;
     transition: all 0.2s;
     flex-shrink: 0;
+    margin-top: 2px;
 }
 
 .checkbox:hover {
@@ -35,11 +52,18 @@
     border-color: var(--accent-color);
 }
 
+.textWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
 .text {
-    flex: 1;
     font-size: 1rem;
     color: var(--text-primary);
     transition: color 0.2s;
+    word-break: break-word;
+    line-height: 1.5;
 }
 
 .completedText {
@@ -47,8 +71,33 @@
     color: var(--text-secondary);
 }
 
+.metaData {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    padding: 0.125rem 0.5rem;
+    border-radius: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.overdue {
+    color: var(--danger-color);
+    border-color: var(--danger-color);
+    background: rgba(239, 68, 68, 0.05);
+}
+
 .input {
-    flex: 1;
+    width: 100%;
     font-size: 1rem;
     padding: 0.5rem;
     border: 1px solid var(--accent-color);
@@ -64,11 +113,20 @@
     margin-left: 1rem;
     opacity: 0;
     transition: opacity 0.2s;
+    flex-shrink: 0;
 }
 
 .item:hover .actions,
 .item:focus-within .actions {
     opacity: 1;
+}
+
+/* Mobile optimization */
+@media (max-width: 640px) {
+    .actions {
+        opacity: 1;
+        /* Always show actions on mobile */
+    }
 }
 
 .actionBtn {

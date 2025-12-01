@@ -5,12 +5,14 @@ import { TodoList } from './presentation/components/TodoList';
 import { TodoFilters, type FilterType } from './presentation/components/TodoFilters';
 import { AddTodoModal } from './presentation/components/AddTodoModal';
 import { SettingsScreen } from './presentation/components/SettingsScreen';
+import { Stats } from './presentation/components/Stats';
 import { Settings, Plus } from 'lucide-react';
 import './presentation/styles/global.css';
 
 const TodoApp = () => {
   const { todos, loading, add, toggle, remove, update } = useTodos();
   const [filter, setFilter] = useState<FilterType>('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentScreen, setCurrentScreen] = useState<'home' | 'settings'>('home');
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -31,9 +33,15 @@ const TodoApp = () => {
   };
 
   const filteredTodos = todos.filter(todo => {
-    if (filter === 'active') return !todo.completed;
-    if (filter === 'completed') return todo.completed;
-    return true;
+    const matchesFilter =
+      filter === 'all' ? true :
+        filter === 'active' ? !todo.completed :
+          todo.completed;
+
+    const matchesSearch = todo.text.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      todo.category?.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return matchesFilter && matchesSearch;
   });
 
   if (currentScreen === 'settings') {
@@ -47,18 +55,18 @@ const TodoApp = () => {
   }
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem 1rem', paddingBottom: '6rem' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem 1rem', paddingBottom: '6rem' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 700, color: 'var(--text-primary)' }}>Tasks</h1>
           <p style={{ margin: '0.5rem 0 0', color: 'var(--text-secondary)' }}>
-            {todos.filter(t => !t.completed).length} tasks remaining
+            Manage your tasks efficiently
           </p>
         </div>
         <button
           onClick={() => setCurrentScreen('settings')}
           style={{
-            padding: '0.5rem',
+            padding: '0.75rem',
             borderRadius: '50%',
             background: 'var(--bg-secondary)',
             border: '1px solid var(--border-color)',
@@ -66,7 +74,8 @@ const TodoApp = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            transition: 'all 0.2s'
           }}
           aria-label="Settings"
         >
@@ -74,7 +83,14 @@ const TodoApp = () => {
         </button>
       </header>
 
-      <TodoFilters currentFilter={filter} onFilterChange={setFilter} />
+      <Stats todos={todos} />
+
+      <TodoFilters
+        currentFilter={filter}
+        onFilterChange={setFilter}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
 
       {loading ? (
         <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>Loading...</div>
@@ -93,13 +109,13 @@ const TodoApp = () => {
           position: 'fixed',
           bottom: '2rem',
           right: '2rem',
-          width: '56px',
-          height: '56px',
+          width: '64px',
+          height: '64px',
           borderRadius: '50%',
           background: 'var(--accent-color)',
           color: 'white',
           border: 'none',
-          boxShadow: 'var(--shadow-md)',
+          boxShadow: 'var(--shadow-lg)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -111,7 +127,7 @@ const TodoApp = () => {
         onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
         aria-label="Add Task"
       >
-        <Plus size={24} />
+        <Plus size={28} />
       </button>
 
       <AddTodoModal
