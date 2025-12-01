@@ -1,0 +1,91 @@
+.item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: var(--bg-primary);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 0.75rem;
+    transition: box-shadow 0.2s;
+}
+
+.item:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.checkbox {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.checkbox:hover {
+    border-color: var(--accent-color);
+}
+
+.checkbox.checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.text {
+    flex: 1;
+    font-size: 1rem;
+    color: var(--text-primary);
+    transition: color 0.2s;
+}
+
+.completedText {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+
+.input {
+    flex: 1;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border: 1px solid var(--accent-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    outline: none;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 1rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.item:hover .actions,
+.item:focus-within .actions {
+    opacity: 1;
+}
+
+.actionBtn {
+    color: var(--text-secondary);
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.actionBtn:hover {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.deleteBtn:hover {
+    color: var(--danger-color);
+    background-color: rgba(239, 68, 68, 0.1);
+}
