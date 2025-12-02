@@ -2,6 +2,20 @@
   "name": "totoapp",
   "private": true,
   "version": "0.0.0",
+  "description": "A modern Todo application built with React, TypeScript, and Clean Architecture principles.",
+  "keywords": [
+    "react",
+    "typescript",
+    "clean-architecture",
+    "todo-app",
+    "vite",
+    "vitest",
+    "testing-library",
+    "solid-principles",
+    "design-patterns",
+    "frontend-architecture"
+  ],
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",
