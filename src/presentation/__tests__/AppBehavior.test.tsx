@@ -1,40 +1,51 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
+import { store } from '../store/store';
+import { todoApi } from '../store/api/todoApi';
 import App from '../../App';
 
-// Mock the LocalStorageTodoRepository to avoid persisting data between tests
-// but keep the logic functional for the integration test
-vi.mock('../../data/repositories/LocalStorageTodoRepository', () => {
-    let store: any[] = [];
+const { mockStore } = vi.hoisted(() => {
+    return { mockStore: { todos: [] as any[] } };
+});
+
+// Mock ApiTodoRepository to simulate backend behavior in memory
+vi.mock('../../data/repositories/ApiTodoRepository', () => {
     return {
-        LocalStorageTodoRepository: class {
-            async getTodos() { return [...store]; }
-            async saveTodo(todo: any) { store.push(todo); }
+        ApiTodoRepository: class {
+            constructor() { }
+            async getTodos() { return [...mockStore.todos]; }
+            async saveTodo(todo: any) { mockStore.todos.push(todo); }
             async updateTodo(todo: any) {
-                store = store.map(t => t.id === todo.id ? todo : t);
+                mockStore.todos = mockStore.todos.map(t => t.id === todo.id ? todo : t);
             }
             async deleteTodo(id: string) {
-                store = store.filter(t => t.id !== id);
+                mockStore.todos = mockStore.todos.filter(t => t.id !== id);
             }
         }
     };
 });
 
+const renderWithProviders = (ui: React.ReactElement) => {
+    return render(
+        <Provider store={store}>
+            {ui}
+        </Provider>
+    );
+};
+
 describe('App Behavior (BDD)', () => {
     beforeEach(() => {
-        // Clear mocks if needed, though our manual mock handles state reset via closure if we wanted, 
-        // but here we rely on the fact that the module is cached. 
-        // For a cleaner BDD test, we might want to reset the store.
-        // However, since we can't easily access the closed-over variable, 
-        // we'll rely on unique text or just accept the mock limitation for now.
-        // A better way is to mock the prototype or use a factory.
         vi.clearAllMocks();
+        // Reset Redux state
+        store.dispatch(todoApi.util.resetApiState());
+        mockStore.todos = [];
     });
 
     it('should allow a user to add, complete, and delete a task', async () => {
         const user = userEvent.setup();
-        render(<App />);
+        renderWithProviders(<App />);
 
         // 1. Verify initial state
         expect(screen.getByRole('heading', { name: /Tasks/i })).toBeInTheDocument();
@@ -86,7 +97,7 @@ describe('App Behavior (BDD)', () => {
 
     it('should filter tasks by search query', async () => {
         const user = userEvent.setup();
-        render(<App />);
+        renderWithProviders(<App />);
 
         // Add two tasks
         const addButton = screen.getByLabelText('Add Task');
@@ -118,7 +129,7 @@ describe('App Behavior (BDD)', () => {
 
     it('should not add task if text is empty', async () => {
         const user = userEvent.setup();
-        render(<App />);
+        renderWithProviders(<App />);
 
         const addButton = screen.getByLabelText('Add Task');
         await user.click(addButton);
@@ -132,7 +143,7 @@ describe('App Behavior (BDD)', () => {
 
     it('should close modal when cancel is clicked', async () => {
         const user = userEvent.setup();
-        render(<App />);
+        renderWithProviders(<App />);
 
         const addButton = screen.getByLabelText('Add Task');
         await user.click(addButton);
@@ -147,7 +158,7 @@ describe('App Behavior (BDD)', () => {
 
     it('should navigate to settings and toggle theme', async () => {
         const user = userEvent.setup();
-        render(<App />);
+        renderWithProviders(<App />);
 
         const settingsBtn = screen.getByLabelText('Settings');
         await user.click(settingsBtn);
@@ -168,7 +179,7 @@ describe('App Behavior (BDD)', () => {
         const getItemSpy = vi.spyOn(Storage.prototype, 'getItem');
         getItemSpy.mockReturnValue('light');
 
-        render(<App />);
+        renderWithProviders(<App />);
 
         expect(document.documentElement.getAttribute('data-theme')).not.toBe('dark');
 
@@ -179,7 +190,7 @@ describe('App Behavior (BDD)', () => {
         const user = userEvent.setup();
         const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
 
-        render(<App />);
+        renderWithProviders(<App />);
 
         // Navigate to settings
         const settingsBtn = screen.getByLabelText('Settings');

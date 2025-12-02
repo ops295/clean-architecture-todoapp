@@ -1,0 +1,18 @@
+{
+    "todos": [
+        {
+            "id": "1",
+            "text": "Buy groceries",
+            "completed": false,
+            "createdAt": 1717324800000,
+            "priority": "medium"
+        },
+        {
+            "id": "2",
+            "text": "Walk the dog",
+            "completed": true,
+            "createdAt": 1717411200000,
+            "priority": "high"
+        }
+    ]
+}

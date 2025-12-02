@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TodoProvider } from './infrastructure/di/TodoContext';
+
 import { useTodos } from './presentation/hooks/useTodos';
 import { TodoList } from './presentation/components/TodoList';
 import { TodoFilters, type FilterType } from './presentation/components/TodoFilters';
@@ -141,9 +141,7 @@ const TodoApp = () => {
 
 const App = () => {
   return (
-    <TodoProvider>
-      <TodoApp />
-    </TodoProvider>
+    <TodoApp />
   );
 };
 
