@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
-import { TodoProvider } from './infrastructure/di/TodoContext';
+
 import { useTodos } from './presentation/hooks/useTodos';
+import { useAppSelector } from './presentation/hooks/useAppSelector';
+import { useAppDispatch } from './presentation/hooks/useAppDispatch';
+import { setFilter, setSearchQuery } from './presentation/store/slices/todoSlice';
 import { TodoList } from './presentation/components/TodoList';
-import { TodoFilters, type FilterType } from './presentation/components/TodoFilters';
+import { TodoFilters } from './presentation/components/TodoFilters';
 import { AddTodoModal } from './presentation/components/AddTodoModal';
 import { SettingsScreen } from './presentation/components/SettingsScreen';
 import { Stats } from './presentation/components/Stats';
@@ -11,8 +14,9 @@ import './presentation/styles/global.css';
 
 const TodoApp = () => {
   const { todos, loading, add, toggle, remove, update } = useTodos();
-  const [filter, setFilter] = useState<FilterType>('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const dispatch = useAppDispatch();
+  const filter = useAppSelector(state => state.todos.filter);
+  const searchQuery = useAppSelector(state => state.todos.searchQuery);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentScreen, setCurrentScreen] = useState<'home' | 'settings'>('home');
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -87,9 +91,9 @@ const TodoApp = () => {
 
       <TodoFilters
         currentFilter={filter}
-        onFilterChange={setFilter}
+        onFilterChange={(f) => dispatch(setFilter(f))}
         searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
+        onSearchChange={(q) => dispatch(setSearchQuery(q))}
       />
 
       {loading ? (
@@ -141,9 +145,7 @@ const TodoApp = () => {
 
 const App = () => {
   return (
-    <TodoProvider>
-      <TodoApp />
-    </TodoProvider>
+    <TodoApp />
   );
 };
 
